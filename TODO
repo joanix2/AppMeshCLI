@@ -1,0 +1,28 @@
+1. Créer une CLI
+2. Générer un projet GitHub
+3. Création d'une branche `generate`
+4. Gestion des commits et des branches
+5. Créer un graphe DBML
+6. Créer un projet Django
+7. Création de l'application Django
+8. Créer les modèles
+9. Créer les schémas
+10. Créer les routes
+11. Changer les paramètres de l'application
+12. Création du `Dockerfile` > Appliquer les migrations > Lancer l'API
+13. Création du `docker-compose`
+14. Création des fichiers `.env`, `README.md`, `.gitignore`, `.dockerignore`, `requirements.txt`
+15. Création d'une application Flutter
+16. Connexion à l'API
+17. Gestion des tokens
+18. Création des services
+19. Création des DTOs
+20. Création des pages de base (landing page, connexion, inscription, mot de passe oublié)
+21. Génération des pages (à partir de la maquette)
+22. Génération des composants des pages
+23. Merge de la branche `generate`
+24. Création d'une CI/CD
+25. Écriture des tests
+26. Génération du diagram UML à partir d'une photo
+27. Création des tickets sur jria
+28. Génération de la maquette de l'application
