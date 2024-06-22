@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  {{ service_name }}:
+    build:
+      context: .
+      dockerfile: {{ dockerfile_path }}
+    ports:
+      - "{{ host_port }}:{{ container_port }}"
+    environment:
+      - ENV_VAR=value
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: {{ db_name }}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+
