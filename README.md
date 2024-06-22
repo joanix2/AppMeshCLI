@@ -7,7 +7,7 @@ AppMeshCLI est un outil de ligne de commande robuste conçu pour accélérer et 
 ### Génération Automatique de Code
 - **Templates de Code :** Génère automatiquement des modèles, des vues, des contrôleurs et des DTOs pour la création d'APIs en C# .NET, Django, et d'autres frameworks.
 - **Frontend Automation :** Crée des services pour la connexion aux APIs dans Flutter et génère également les modèles nécessaires.
-- **Diagramme de Classes :** Produit un diagramme de classes de l'application au format Mermaid en intégrant avec ChatGPT pour une visualisation et une compréhension améliorées de la structure de l'application.
+- **Diagramme de Classes :** Produit un diagramme de classes de l'application au format DMBL avec ChatGPT pour une visualisation et une compréhension améliorées de la structure de l'application.
 
 ### Intégration et DevOps
 - **Docker :** Automatise la création d'images Docker et de configurations Docker Compose pour faciliter le déploiement et la gestion des environnements.
