@@ -1,0 +1,67 @@
+import graphene
+from graphene_django.types import DjangoObjectType
+from .models import {% for class_name in classes %}{{ class_name }}{% if not loop.last %}, {% endif %}{% endfor %}
+from graphene_django.forms.mutation import DjangoModelFormMutation
+from django import forms
+import json
+
+# Définition des types GraphQL pour chaque modèle
+{% for class_name in classes %}
+class {{ class_name }}Type(DjangoObjectType):
+    class Meta:
+        model = {{ class_name }}
+        fields = "__all__"
+
+# Définition des mutations pour créer des instances de chaque modèle
+class {{ class_name }}CreateMutation(DjangoModelFormMutation):
+    class Meta:
+        form_class = forms.modelform_factory({{ class_name }}, fields="__all__")
+
+# Définition des mutations pour mettre à jour des instances de chaque modèle
+class {{ class_name }}UpdateMutation(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+        data = graphene.types.json.JSONString(required=True)
+
+    {{ class_name|lower }} = graphene.Field({{ class_name }}Type)
+
+    def mutate(self, info, id, data):
+        instance = {{ class_name }}.objects.get(pk=id)
+        data_dict = json.loads(data)  # Utilisez json.loads pour une désérialisation sûre
+        for field_name, value in data_dict.items():
+            if hasattr(instance, field_name):
+                setattr(instance, field_name, value)
+        instance.save()
+        return {{ class_name }}UpdateMutation({{ class_name|lower }}=instance)
+
+# Définition des mutations pour supprimer des instances de chaque modèle
+class {{ class_name }}DeleteMutation(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+
+    ok = graphene.Boolean()
+
+    def mutate(self, info, id):
+        instance = {{ class_name }}.objects.get(pk=id)
+        instance.delete()
+        return {{ class_name }}DeleteMutation(ok=True)
+{% endfor %}
+
+# Définition de la classe Query pour accéder aux modèles
+class Query(graphene.ObjectType):
+    {% for class_name in classes %}
+    {{ class_name|lower }}s = graphene.List({{ class_name }}Type)
+    def resolve_{{ class_name|lower }}s(self, info, **kwargs):
+        return {{ class_name }}.objects.all()
+    {% endfor %}
+
+# Définition de la classe Mutation pour les opérations CRUD
+class Mutation(graphene.ObjectType):
+    {% for class_name in classes %}
+    create_{{ class_name|lower }} = {{ class_name }}CreateMutation.Field()
+    update_{{ class_name|lower }} = {{ class_name }}UpdateMutation.Field()
+    delete_{{ class_name|lower }} = {{ class_name }}DeleteMutation.Field()
+    {% endfor %}
+
+# Construction du schéma GraphQL
+schema = graphene.Schema(query=Query, mutation=Mutation)
