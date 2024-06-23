@@ -1,6 +1,5 @@
 import os
 import subprocess
-import click
 import ast
 
 def add_installed_app(settings_path, installed_app_name):
@@ -57,34 +56,4 @@ def register_models_to_admin(app_path, models_tree):
     with open(admin_file, 'w') as file:
         file.write('\n'.join(admin_content))
     print(f"Updated {admin_file} with {len(models_names)} models.")
-
-@click.group()
-def cli():
-    pass
-
-@cli.command()
-@click.argument('path')
-@click.argument('project_name')
-def create_project(path, project_name):
-    """Create a new Django project and add rest_framework to INSTALLED_APPS."""
-    create_django_project(path, project_name)
-    click.echo(f"Created Django project {project_name} at {path}")
-
-@cli.command()
-@click.argument('app_path')
-def add_model(app_path):
-    """Append a simple model to the models.py file of the given app."""
-    append_models(app_path)
-    click.echo(f"Added model to {app_path}/models.py")
-
-@cli.command()
-@click.argument('app_path')
-def register_models(app_path):
-    """Register models in the admin site."""
-    models_tree = get_models(app_path)
-    register_models_to_admin(app_path, models_tree)
-    click.echo(f"Registered models from {app_path}/models.py in admin site")
-
-if __name__ == '__main__':
-    cli()
 

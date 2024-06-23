@@ -1,0 +1,21 @@
+using System;
+using Microsoft.EntityFrameworkCore;
+
+namespace Models
+{
+    public class ApplicationDbContext : DbContext
+    {
+        public DbSet<SampleEntity> SampleEntities { get; set; }
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+    }
+
+    public class SampleEntity
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+}

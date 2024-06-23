@@ -42,33 +42,3 @@ def add_component_to_file(access_token, file_id, component_name):
     else:
         print(f"Failed to add component: {response.text}")
         response.raise_for_status()
-
-@click.group()
-@click.option('--access_token', prompt='Figma access token', help='Your Figma access token.')
-@click.pass_context
-def cli(ctx, access_token):
-    """CLI to manage Figma projects and files."""
-    ctx.ensure_object(dict)
-    ctx.obj['access_token'] = access_token
-
-@cli.command()
-@click.argument('team_id')
-@click.argument('file_name')
-@click.pass_context
-def create_file(ctx, team_id, file_name):
-    """Creates a new Figma file."""
-    access_token = ctx.obj['access_token']
-    create_figma_file(access_token, team_id, file_name)
-
-@cli.command()
-@click.argument('file_id')
-@click.argument('component_name')
-@click.pass_context
-def add_component(ctx, file_id, component_name):
-    """Adds a new component to a Figma file."""
-    access_token = ctx.obj['access_token']
-    add_component_to_file(access_token, file_id, component_name)
-
-if __name__ == '__main__':
-    cli()
-

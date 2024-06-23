@@ -26,17 +26,3 @@ def install_dependencies(project_name):
     os.chdir(project_path)
     run_command('npm install')
 
-@click.command()
-@click.argument('project_name')
-@click.option('--add-material', is_flag=True, help='Add Angular Material to the project.')
-def cli(project_name, add_material):
-    """CLI to initialize an Angular project."""
-    create_angular_project(project_name)
-    if add_material:
-        add_material_to_project(project_name)
-    install_dependencies(project_name)
-    print(f'Successfully created Angular project {project_name}.')
-
-if __name__ == '__main__':
-    cli()
-

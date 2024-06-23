@@ -26,17 +26,3 @@ def add_flutter_firebase(project_name):
     os.chdir(project_path)
     run_command('flutter pub add firebase_core firebase_auth cloud_firestore')
 
-@click.command()
-@click.argument('project_name')
-@click.option('--add-firebase', is_flag=True, help='Add Firebase to the project.')
-def cli(project_name, add_firebase):
-    """CLI to initialize a Flutter project."""
-    create_flutter_project(project_name)
-    install_dependencies(project_name)
-    if add_firebase:
-        add_flutter_firebase(project_name)
-    print(f'Successfully created Flutter project {project_name}.')
-
-if __name__ == '__main__':
-    cli()
-

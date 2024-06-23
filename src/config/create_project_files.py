@@ -1,5 +1,4 @@
 import os
-import click
 
 def create_file(template_path, output_path):
     """Creates a single file from a template."""
@@ -48,16 +47,4 @@ def create_all_files(project_path, templates_dir):
     create_gitignore_file(project_path, templates_dir)
     create_dockerignore_file(project_path, templates_dir)
     create_requirements_file(project_path, templates_dir)
-
-@click.command()
-@click.argument('project_path', type=click.Path())
-@click.option('--templates_dir', type=click.Path(), default=os.path.join(os.getcwd(), 'templates'), help='The directory containing the template files.')
-def cli(project_path, templates_dir):
-    """CLI to create project files from templates."""
-    if not os.path.exists(project_path):
-        os.makedirs(project_path)
-    create_all_files(project_path, templates_dir)
-
-if __name__ == '__main__':
-    cli()
 

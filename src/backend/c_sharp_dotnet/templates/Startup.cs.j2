@@ -1,0 +1,7 @@
+{{ existing_content }}
+
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext<Models.ApplicationDbContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+}
