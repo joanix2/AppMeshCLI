@@ -14,3 +14,17 @@ def to_snake_case(text):
     text = re.sub(r'[^a-z0-9_]', '', text)
     
     return text
+
+def get_project_description():
+    """
+    Demande à l'utilisateur d'entrer la description du projet.
+    Continue à demander tant qu'une description valide (non vide) n'est pas fournie.
+    """
+    while True:
+        description = input("Veuillez entrer la description du projet : ").strip()
+        
+        if description:
+            return description
+        else:
+            print("La description ne peut pas être vide. Veuillez réessayer.")
+

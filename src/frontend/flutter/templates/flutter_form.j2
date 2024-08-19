@@ -1,0 +1,73 @@
+import 'package:flutter/material.dart';
+
+class {{ class_name }}Form extends StatefulWidget {
+  @override
+  _{{ class_name }}FormState createState() => _{{ class_name }}FormState();
+}
+
+class _{{ class_name }}FormState extends State<{{ class_name }}Form> {
+  final _formKey = GlobalKey<FormState>();
+
+  {% for field, field_type in fields.items() %}
+  {{ field_type }} {{ field }} = {{ default_values[field_type] }};
+  {% endfor %}
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          {% for field, field_type in fields.items() %}
+          {% if field_type == "String" %}
+          TextFormField(
+            decoration: InputDecoration(labelText: '{{ field.capitalize() }}'),
+            onSaved: (value) => setState(() => {{ field }} = value),
+            {% if field in required %}
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter {{ field }}';
+              }
+              return null;
+            },
+            {% endif %}
+          ),
+          {% elif field_type == "int" %}
+          TextFormField(
+            decoration: InputDecoration(labelText: '{{ field.capitalize() }}'),
+            keyboardType: TextInputType.number,
+            onSaved: (value) => setState(() => {{ field }} = int.parse(value)),
+            {% if field in required %}
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter {{ field }}';
+              }
+              return null;
+            },
+            {% endif %}
+          ),
+          {% elif field_type == "bool" %}
+          CheckboxListTile(
+            title: Text('{{ field.capitalize() }}'),
+            value: {{ field }},
+            onChanged: (value) => setState(() => {{ field }} = value),
+          ),
+          {% endif %}
+          {% endfor %}
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  _formKey.currentState.save();
+                  // Process data here
+                }
+              },
+              child: Text('Submit'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

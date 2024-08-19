@@ -1,6 +1,6 @@
 import subprocess
 
-def run_command(command):
+def run_command(command:str):
     """Exécute une commande shell et affiche la sortie en temps réel."""
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 

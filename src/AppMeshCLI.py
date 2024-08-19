@@ -2,8 +2,9 @@ import os
 import click
 from jira import JIRA # type: ignore
 
-from utilis.format_text import to_snake_case
-from settings import BACK_FRAMEWORK, FRONT_FRAMEWORK
+from utilis.ascii import generer_ascii_art, generer_contour_ascii
+from utilis.format_text import get_project_description, to_snake_case
+from settings import API, BACK_FRAMEWORK, DATABASE, FRONT_FRAMEWORK
 from utilis.json_save import JsonDict
 from utilis.similarity import validate_framework_name
 from backend.c_sharp_dotnet.c_sharp_dotnet import initialize_entity_framework_project
@@ -22,7 +23,10 @@ import subprocess
 
 @click.group()
 def cli():
-    pass
+    texte_a_afficher = "App Mesh CLI"
+    ascii_art_resultat = generer_ascii_art(texte_a_afficher)
+    contour_ascii = generer_contour_ascii(ascii_art_resultat)
+    print(contour_ascii)
 
 # -------------------------- Project Init -------------------------- #
 
@@ -32,8 +36,9 @@ def cli():
 @click.option('--back', type=str, default='django', help='Framework back-end à utiliser.')
 @click.option('--api', type=str, default='graphql', help='Type d\'API à utiliser.')
 @click.option('--database', type=str, default='postgres', help='Base de données à utiliser.')
+@click.option('--description', type=str, default='', help='Description du projet.')
 @click.option('--templates_dir', type=click.Path(), default=os.path.join(os.path.dirname(__file__), 'config', 'templates'), help='The directory containing the template files.')
-def init(full_path, front, back, api, database, templates_dir):
+def init(full_path, front, back, api, database, description, templates_dir):
     """
     CLI to create project files from templates.
     
@@ -47,6 +52,9 @@ def init(full_path, front, back, api, database, templates_dir):
     --database   -- Database to use (default: postgres).
     --templates_dir -- Directory containing the template files.
     """
+
+    if description is None or description.strip() == "":
+        description = get_project_description()
 
     # Split the full path into directory path and project name
     project_path, project_name = os.path.split(full_path)
@@ -62,30 +70,6 @@ def init(full_path, front, back, api, database, templates_dir):
     if not os.path.exists(full_project_path):
         os.makedirs(full_project_path)
 
-    # Path to the configuration file
-    config_file = os.path.join(full_project_path, 'config.json')
-    
-    # Load the configuration using JsonDict
-    config = JsonDict(config_file)
-    
-    # Update the configuration with the current settings
-    config.update({
-        "project_path": full_project_path,
-        "front": front,
-        "back": back,
-        "api": api,
-        "database": database,
-        "templates_dir": templates_dir
-    })
-    
-    # Afficher les paramètres pour vérifier
-    print(f"Creating project '{project_name}' at '{full_project_path}'")
-    print(f"Front-end framework: {front}")
-    print(f"Back-end framework: {back}")
-    print(f"API type: {api}")
-    print(f"Database: {database}")
-    print(f"Templates directory: {templates_dir}")
-
     # Exemple d'étapes supplémentaires pour initialiser le projet
     # - Initialisation du dépôt Git
     create_git_project(full_project_path)
@@ -98,8 +82,39 @@ def init(full_path, front, back, api, database, templates_dir):
     back_project_name = f"{to_snake_case(project_name)}_back"
     back_framwork_name = create_back(back_project_name, back, full_project_path)
 
+    # - Initialisation du projet front-end
+    api_type = validate_framework_name(api, API)
+    
+    # - Initialisation du projet back-end
+    database_name = validate_framework_name(database, DATABASE)
+
     # - Création des fichiers à partir des templates
     create_all_files(full_project_path, templates_dir)
+
+    # Path to the configuration file
+    config_file = os.path.join(full_project_path, 'config.json')
+    
+    # Load the configuration using JsonDict
+    config = JsonDict(config_file)
+    
+    # Update the configuration with the current settings
+    config.update({
+        "project_path": full_project_path,
+        "front": front_framwork_name,
+        "back": back_framwork_name,
+        "api": api_type,
+        "database": database_name,
+        "templates_dir": templates_dir,
+        "description": description
+    })
+    
+    # Afficher les paramètres pour vérifier
+    print(f"Creating project '{project_name}' at '{full_project_path}'")
+    print(f"Front-end framework: {front_project_name}")
+    print(f"Back-end framework: {back_framwork_name}")
+    print(f"API type: {api_type}")
+    print(f"Database: {database_name}")
+    print(f"Templates directory: {templates_dir}")
 
 
 def create_front(project_name, framwork_name, path):

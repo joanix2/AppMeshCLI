@@ -15,7 +15,7 @@ def create_django_project(path, project_name):
     # Créer le projet Django dans le chemin spécifié
     project_path = os.path.join(path, project_name)
     os.makedirs(project_path, exist_ok=True)
-    run_command(['django-admin', 'startproject', project_name, project_path])
+    run_command(f"django-admin startproject {project_name} {project_path}")
 
     # Chemin du fichier settings.py
     settings_path = os.path.join(project_path, project_name, 'settings.py')
