@@ -1,4 +1,4 @@
-# Créer une base de données MongoDB [ok]
+# Créer une base de données MongoDB [x]
 
 - Fonction
 - Templates Jinja
@@ -6,13 +6,14 @@
 - Messages
 - Completion
 
-# Buffer de message
+# Buffer de message [x]
 Enregistremnet des requettes pour diminuer les calls api
 
-# Rajout d'input
-Changement du message
+# Rajout d'input [x]
+Changement du message a partir d'une fonction (function string)
 
 # Finish reason
+Gestion des erreur si chat gpt ne fini pas la completion
 
 # Ecriture de code à partir d'une image
 Génération de code avec l'api de chatGPT Vision
@@ -25,3 +26,5 @@ Création d'un code de test pour vérifier que les function son valide. Les para
 
 # Auto correction
 Si les données de coicident pas proposer une auto correction des templates avec chatGPT
+
+# Prendre en compte la version du model dans l'historique des calls

@@ -30,6 +30,8 @@ def cli():
 
 # -------------------------- Project Init -------------------------- #
 
+# python AppMeshCLI.py init ~/Documents/AppMeshCLI/MyProjectName --front flotter --back Django
+
 @cli.command()
 @click.argument('full_path', type=click.Path())
 @click.option('--front', type=str, default='flutter', help='Framework front-end à utiliser.')

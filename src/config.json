@@ -1,0 +1,9 @@
+{
+    "project_path": "/home/joan/Documents/AppMeshCLI/MyProjectName",
+    "front": "flutter",
+    "back": "django",
+    "api": "graphql",
+    "database": "postgres",
+    "templates_dir": "/home/joan/Documents/AppMeshCLI/AppMeshCLI/src/config/templates",
+    "description": "c'est un projet de gestion de projet pour du devellopement front qui affiche les composants sous la forme d'un graphe"
+}

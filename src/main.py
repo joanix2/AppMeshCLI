@@ -1,30 +1,20 @@
-# from function_calling.complet import get_completion, load_tools_from_directory
-# from function_calling.schema2template import complete_template_from_json
-
-
-# def create_readme(client, directory_path = ""):
-#     tools = load_tools_from_directory(directory_path)
-#     readme = get_completion(client, messages, tools, "get_readme")
-#     # Exemple d'utilisation
-#     complete_template_from_json(
-#         schema_json_path='schema.json',
-#         template_path='README_template.jinja2',
-#         output_path='README.md'
-#     )
-
-import argparse
-from datetime import datetime
 import json
 import os
 from bson import ObjectId
+import hashlib
+import argparse
+from datetime import datetime
+
 from dotenv import load_dotenv
 from openai import OpenAI
+from jinja2 import Template
+
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo.errors import DuplicateKeyError
-from jinja2 import Template
-from complet import get_completion
-import hashlib
+
+from function_calling.complet import get_completion
+from function_calling.function import *
 
 def convert_to_serializable(obj):
     if isinstance(obj, ObjectId):
@@ -116,6 +106,16 @@ def find_task_by_command(db, command_name):
         print(f"No task found with command name '{command_name}'")
         return None
     
+def compile_text(text):
+    try:
+        # Tenter d'évaluer la chaîne comme un f-string
+        result = eval(f"f'''{text}'''")
+        return result
+    except Exception as e:
+        # Si une erreur se produit, renvoyer la chaîne d'origine
+        print(f"Invalid string format: {text}")
+        return text
+    
 def reconstitute_message(db, message_document):
     prompts_collection = db['prompts']  # Collection 'prompts'
 
@@ -131,7 +131,11 @@ def reconstitute_message(db, message_document):
         
         if prompt_data:
             # Ajout du contenu du prompt à la liste
-            reconstituted_message.append(prompt_data)
+            content = prompt_data.get("content")
+            reconstituted_message.append({
+                "role" : prompt_data.get("role"),
+                "content" : compile_text(content) if prompt_data.get("function_string", False) else content
+            })
         else:
             print(f"Prompt with ID {prompt_id} not found.")
 
