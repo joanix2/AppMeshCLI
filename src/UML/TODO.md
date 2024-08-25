@@ -7,8 +7,8 @@
 # afficher le graphe en ASCII art avec http://www.plantuml.com/plantuml/uml/
 
 
-popup
-creation de modèle
+popup ok
+creation de modèle ok
 bug graphique (z-index)
 conversion graph -> dbml
 conversion dbml -> graph

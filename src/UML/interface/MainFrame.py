@@ -104,8 +104,10 @@ class MainCanvas(tk.Canvas):
     def set_button_pos(self, width, height):
         self.width = width
         self.height = height
+        self.add_button.IsStatic=False
         self.add_button.move(self.width - self.size - self.padding, 
                              self.height - self.size - self.padding)
+        self.add_button.IsStatic=True
         self.refresh()
 
     def delete_object(self, obj):
